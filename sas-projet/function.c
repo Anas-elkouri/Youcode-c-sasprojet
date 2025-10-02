@@ -61,7 +61,7 @@ void gerer_sold(int choix2)
     switch (choix2)
     {
     case 1:
-        printf("====afficher solde====\n");
+        printf("\033[32m""====afficher solde====\n""\033[0m");
         printf("solde : %.2f \n", client[0].sold);
         break;
     case 2:
@@ -69,6 +69,10 @@ void gerer_sold(int choix2)
         printf("====ajouter solde====\n");
         printf("entre montant ajouter : ");
         scanf("%f", &montant);
+        if(montant<0){
+            printf("\033[31m""no montant < 0 \n""\033[0m");
+            return;
+        }
         client[0].sold += montant;
         printf("sold : %.2f\n", client[0].sold);
     default:
@@ -82,7 +86,7 @@ void Con_produits(int choix3)
     switch (choix3)
     {
     case 1:
-        printf("==== Liste des produits ====\n");
+        printf("\033[32m""==== Liste des produits ====\n""\033[0m");
         for (int i = 0; i < nbProduits; i++)
         {
             printf("|id : %d|\n", produits[i].idProduit);
@@ -97,7 +101,7 @@ void Con_produits(int choix3)
     case 2:
         int found = 0;
 
-        printf("==== recherche produits ====\n");
+        printf("\033[32m""==== recherche produits ====\n""\033[0m");
         char serch[MAX];
         printf("entre nom ou categorie : ");
         scanf(" %[^\n]", serch);
@@ -176,7 +180,7 @@ void Con_produits(int choix3)
     case 4:
 
         int idp;
-        printf("==== details produit ====\n");
+        printf("\033[32m""==== details produit ====\n""\033[0m");
         printf("entre id produit : ");
         scanf("%d", &idp);
 
@@ -198,7 +202,7 @@ void Con_produits(int choix3)
         }
         if (!fond)
         {
-            printf("produit introuvable\n");
+            printf("\033[32m""non produit\n""\033[0m");
         }
         break;
     default:
@@ -259,7 +263,7 @@ void achat()
 {
     int fnd = 0;
     int idp;
-    printf("==== achat produit ====\n");
+    printf("\033[32m""==== achat produit ====\n""\033[0m");
     printf("entre id produit : ");
     scanf("%d", &idp);
     for (int i = 0; i < nbProduits; i++)
@@ -274,17 +278,17 @@ void achat()
             printf("|categorie : %s|\n", produits[i].categorie);
             printf("|description : %s\n", produits[i].description);
             printf("--------------------------------------------------\n");
-            printf("==== confirmation achat ====\n");
+            printf("\033[33m""==== confirmation achat ====\n""\033[0m");
             printf("the produit prix : %.2f \n", produits[i].prix);
             printf("your sold : %.2f \n", client[0].sold);
-            printf("1. confirm achat \n");
-            printf("0. annuler achat \n");
+            printf("\033[32m""1. confirm achat \n""\033[0m");
+            printf("\033[31m""0. annuler achat \n""\033[0m");
             break;
         }
     }
     if (!fnd)
     {
-        printf("produit introuvable\n");
+        printf("\031[32m""produit introuvable\n""\033[0m");
         return;
     }
     int confrm;
@@ -296,7 +300,7 @@ void achat()
         acheterProduit();
         break;
     case 0:
-        printf("achat annuler\n");
+        printf("\033[31m""achat annuler\n""\033[0m");
         break;
 
     default:
@@ -324,25 +328,25 @@ void acheterProduit()
 
                 if (client[0].sold >= produits[i].prix)
                 {
-                    client[0].sold -= produits[i].prix;
-                    produits[i].stock--;
+                    client[0].sold -= produits[i].prix * nbr;
+                    produits[i].stock -= nbr;
                     produits[i].nbrs += nbr;
-                    printf(" achat sucsuss\n achat de %s ", produits[i].nomproduit);
-                    printf("new sold : %.2f \n", client[0].sold);
-                    printf("stock restant de %d \n", produits[i].nbrs);
+                    printf("\033[32m"" achat sucsuss\n achat de %s ""\033[m", produits[i].nomproduit);
+                    printf("\033[31m""new sold : %.2f \n""\033[0m", client[0].sold);
+                    printf("\033[32m""stock restant de %d \n""\033[0m", produits[i].nbrs);
                 }
                 else
                     printf("non solde\n");
             }
             else
             {
-                printf("no stock.\n");
+                printf("\033[31m""no stock.\n""\033[0m");
             }
         }
     }
     if (!found)
     {
-        printf("Produit introuvable.\n");
+        printf("\033[31m""Produit introuvable.\n""\033[0m");
     }
 }
 // Statistiques.
@@ -350,37 +354,25 @@ void statistiques()
 {
     if (client[0].sold == 0)
     {
-        printf("==== statistiques ====\n");
+        printf("\033[33m""==== statistiques ====\n""\033[0m");
         printf("vous n'avez pas encore effectue d'achat.\n");
     }
     else
     {
-        printf("==== statistiques ====\n");
+        printf("\033[32m""==== statistiques ====\n""\033[0m");
         float total = 0.0;
+        float mo = 0.0;
         for (int i = 0; i < nbProduits; i++)
         {
             if (produits[i].nbrs > 0)
             {
-                printf("produit : %s | nombre achete : %d | prix  : %.2f \n", produits[i].nomproduit, produits[i].nbrs, produits[i].prix);
+                mo = produits[i].prix * produits[i].nbrs;
+                printf("\033[32m""produit : %s | nombre achete : %d | prix  : %.2f \n""\033[0m", produits[i].nomproduit, produits[i].nbrs, mo);
                 total += produits[i].prix * produits[i].nbrs;
-                printf("--------------------------------------------------\n");
+                printf("\033[32m""--------------------------------------------------\n""\033[0m");
             }
         }
-        printf("total depense : %.2f \n", total);
+        printf("\033[33m""total depense : %.2f \n""\033[0m", total);
     }
 }
-// void lowercase()
-// {
-//     for (int i = 0; i < nbProduits; i++) 
-//     {
-       
-//         for (int j = 0; produits[i].nomproduit[j] != '\0'; j++) {
-//             produits[i].nomproduit[j] = tolower(produits[i].nomproduit[j]);
-//         }
 
-    
-//         for (int j = 0; produits[i].categorie[j] != '\0'; j++) {
-//             produits[i].categorie[j] = tolower(produits[i].categorie[j]);
-//         }
-//     }
-// }

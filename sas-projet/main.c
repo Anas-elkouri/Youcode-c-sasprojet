@@ -39,9 +39,9 @@ int main()
         case 2:
         system("cls");
             int choix2;
-            printf("gestion du solde virtuel : \n");
-            printf("1. affisher solde \n");
-            printf("2. ajouter solde \n");
+            printf("\033[33m""gestion du solde virtuel : \n""\033[0m");
+            printf("\033[32m""1. affisher solde \n""\033[0m");
+            printf("\033[32m""2. ajouter solde \n""\033[0m");
             printf("entre choix : ");
             scanf("%d", &choix2);
             gerer_sold(choix2);
