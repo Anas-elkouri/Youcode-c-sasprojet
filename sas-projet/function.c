@@ -355,13 +355,17 @@ void statistiques()
     if (client[0].sold == 0)
     {
         printf("\033[33m""==== statistiques ====\n""\033[0m");
-        printf("vous n'avez pas encore effectue d'achat.\n");
+        printf("non sold.\n");
     }
     else
     {
         printf("\033[32m""==== statistiques ====\n""\033[0m");
         float total = 0.0;
         float mo = 0.0;
+        if(produits[0].nbrs==0){
+            printf("\033[33m""no achat \n""\033[0m");
+            return;
+        }
         for (int i = 0; i < nbProduits; i++)
         {
             if (produits[i].nbrs > 0)
